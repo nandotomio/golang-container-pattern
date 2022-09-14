@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/nandotomio/golang-container-pattern/src/structs"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -22,7 +23,9 @@ func main() {
 		"5432",
 	)
 	postgresDialector := postgres.Open(postgresDns)
-	_, err := gorm.Open(postgresDialector, &gorm.Config{})
+	db, err := gorm.Open(postgresDialector, &gorm.Config{})
+
+	db.AutoMigrate(&structs.Installment{})
 
 	if err != nil {
 		log.Fatalf("DB connection error. Error: %v", err.Error())
