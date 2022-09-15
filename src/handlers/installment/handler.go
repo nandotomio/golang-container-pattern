@@ -32,14 +32,22 @@ func (ih InstallmentHandler) CreateInstallment(c *fiber.Ctx) error {
 	err := c.BodyParser(&body)
 
 	if err != nil {
-		return c.Status(http.StatusBadRequest).JSON(err.Error())
+		return c.Status(http.StatusBadRequest).JSON(structs.Response{
+			Data: err.Error(),
+			Tag:  "BAD_REQUEST",
+		})
 	}
 
 	err = ih.installmentService.Create(body)
 
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(err.Error())
+		return c.Status(http.StatusInternalServerError).JSON(structs.Response{
+			Data: err.Error(),
+			Tag:  "INTERNAL_SERVER_ERROR",
+		})
 	}
 
-	return c.Status(http.StatusCreated).JSON("Installment created")
+	return c.Status(http.StatusCreated).JSON(structs.Response{
+		Data: "Installment created",
+	})
 }
